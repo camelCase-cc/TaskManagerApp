@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&family=Montserrat&family=Nunito+Sans&family=Philosopher&family=Quicksand&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Task Manager</title>
+</head>
+<body>
+
+    <header class="app-title">
+        <h1>Task Manager</h1>
+    </header>
+
+    <section class="main-content">
+        <div class="open-modal-div">
+            <button class="open-modal">+</button>
+            <span>click to add task</span>
+        </div>
+        <section class="task-list">
+            <ul class="tasks">
+
+            </ul>
+        </section>
+    </section>
+
+    <section class="overlay hidden">
+        <div class="modal hidden">
+
+            <div class="title">
+                <h2>Add New Task</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form action="" class="input-data">
+                <fieldset class="task-field">
+                    <label for="task" class="input-label">Task</label>
+                    <input type="text" id="input-task" name="input-task" placeholder="e.g Go Grocery Shopping" required>
+                </fieldset>
+            </form>
+            <div class="buttons">
+                <input type="button" value="Add Task" id="add-task" name="add-task">
+            </div>
+        </div>
+    </section>
+
+    <!-- <div class="overlay hidden"></div> -->
+
+    <script src="./main.js"></script>
+
+</body>
+</html>

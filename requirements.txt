@@ -1,0 +1,5 @@
+[x] - Must be able to add tasks
+[x] - must be able to update display
+[x] - must be able to delete tasks
+[x] - must be able to mark tasks as complete
+[] - must be able to edit tasks
