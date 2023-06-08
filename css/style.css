@@ -57,7 +57,7 @@ li {
     justify-content: space-between;
     align-items: center;
     padding: 15px 0px 10px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     border-bottom: 1px solid hsla(0, 0%, 70%, 0.5);
 }
 
@@ -66,7 +66,6 @@ input[type='button'].mark-as-complete {
     border: none;
     color: hsl(137, 27%, 45%);
     font-size: 1rem;
-    margin-right: 15px;
     cursor: pointer;
     outline: none;
 }
@@ -75,7 +74,6 @@ input[type='button'].delete-task {
     background: transparent;
     border: none;
     color: hsl(0, 91%, 43%);
-    margin-right: 15px;
     cursor: pointer;
     outline: none;
     font-size: 1.2rem;
@@ -152,6 +150,17 @@ input[type='text']::placeholder {
     border: 1px solid hsla(0, 0%, 70%, 0.2);
     box-shadow: .5px .5px 2px .5px hsla(0, 0%, 70%, 0.1);
     font-size: 1.1rem;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-btn {
+    cursor: pointer;
+    color: hsl(220, 9%, 26%);
 }
 
 .overlay {
