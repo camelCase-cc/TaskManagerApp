@@ -1,26 +1,36 @@
-// Store the task in an array
-//dyanamically generate html elements to display each task on the page
-//Update the task list based on user action
+//******************************************************VARIABLES*************************************************************************
 
-var taskLists = []; //storing the tasks
-
-const tasks = document.querySelector('.tasks'); //selects the element with the class tasks
-const overlay = document.querySelector('.overlay'); //selects the element with a class of overlay
-const modal = document.querySelector('.modal'); //selects the element with a class of modal
-const openModalDiv = document.querySelector('.open-modal-div'); //opens the modal
+var taskLists = [];
+let currentIndex; 
+const tasks = document.querySelector('.tasks');
+const overlay = document.querySelector('.overlay');
+const modal = document.querySelector('.modal');
+const openModalDiv = document.querySelector('.open-modal-div');
 const closeModalBtn = document.querySelector('.close')
-const taskName = document.getElementById('input-task'); //stores the name of the task
-const addTaskBtn= document.getElementById('add-task'); //adds a new task to the list
-const deleteBtn = document.querySelector('.delete-task'); //deletes a task from the list
+const taskName = document.getElementById('input-task');
+const addTaskBtn= document.getElementById('add-task');
+const deleteBtn = document.querySelector('.delete-task');
+const updateTaskBtn = document.getElementById("update-task");
 
-//removes the class 'hidden' from the modal and overlay
-const openModal = () => {
+//******************************************************FUNCTIONS*************************************************************************
+const toggleDisplay = (taskType) => {
+    if (taskType === 'add') {
+        updateTaskBtn.style.display = 'none';
+        addTaskBtn.style.display = 'block';
+        taskName.value = '';
+    } else if (taskType === 'update') {
+        addTaskBtn.style.display = "none";
+        updateTaskBtn.style.display = "block";
+    }
+}
+
+const openModal = (taskType) => {
+    toggleDisplay(taskType);
     modal.classList.remove('hidden');
     overlay.classList.remove('hidden');
     taskName.focus();
 }
 
-//adds the class 'hidden' to the modal and overlay
 const closeModal = (e) => {
     modal.classList.add('hidden');
     overlay.classList.add('hidden');
@@ -36,22 +46,19 @@ const findIndex = (taskId) => {
     return targetIndex;
 }
 
-//validate the users input
 const validateInput = () => {
-    let text = taskName.value; // Get the value of the task input
-    event.preventDefault(); // prevent page refresh on form submission
+    let text = taskName.value;
+    event.preventDefault();
     
-    //checks to see if the text is empty or not
     if (text !== '') {
         taskName.value = '';
-        addTask(text); //parses 'text, description, date, category' into the add task function
+        addTask(text);
         closeModal();
     } else {
         alert('Field cannot be empty!');
     }
 }
 
-//creates a new todo objects with following properties 'name, category, isComplete, id, date, description' when called parses the taskName and Category property into the task object
 const addTask = (taskName, taskDescription, taskDate, taskCategory) => {
     const task = { name: taskName, isComplete: false, deleted: false, id: Date.now() };
     taskLists.push(task);
@@ -61,7 +68,7 @@ const addTask = (taskName, taskDescription, taskDate, taskCategory) => {
 
 const displayTask = (task) => {
     localStorage.setItem('tasks', JSON.stringify(taskLists));
-    const list = document.querySelector('.tasks'); //selects the ul element with class 'tasks'
+    const list = document.querySelector('.tasks');
     const item = document.querySelector(`[id='${task.id}']`);
 
     if (task.deleted) {
@@ -70,11 +77,10 @@ const displayTask = (task) => {
     }
 
     const isComplete = task.isComplete ? 'done': '';
-    const newTodoItem = document.createElement('li');  //create a new list item
-    newTodoItem.setAttribute('class', `task ${isComplete}`); //give the 'newTodoItem' A class
-    newTodoItem.setAttribute('id', task.id); //give the 'newTodoItem' an id
+    const newTodoItem = document.createElement('li');
+    newTodoItem.setAttribute('class', `task ${isComplete}`);
+    newTodoItem.setAttribute('id', task.id);
     
-    //set the content of the 'newTodoItem' element created above
     newTodoItem.innerHTML = `
         <label class='label-text' id='${task.id}'>${task.name}</label>
         <span class='buttons' id='${task.id}'>
@@ -97,9 +103,6 @@ const markAsComplete = (taskId) => {
     displayTask(taskLists[index]);
 }
 
-const editTask = (itemKey) => {
-}
-
 const deleteTask = (taskId) => {
     const index = findIndex(taskId);
     if(index > -1 && index < taskLists.length) {
@@ -112,34 +115,25 @@ const deleteTask = (taskId) => {
     }
 }
 
+const editTask = () => {
+    const itemIndex = currentIndex;
+    const updatedText = taskName.value;
+    taskLists[itemIndex].name = updatedText;
+    localStorage.setItem('tasks', JSON.stringify(taskLists));
+    displayTask(taskLists[itemIndex]);
+}
+
 const handleClick = (event) => {
     if (event.target.classList.contains('overlay')) {
-        closeModal(); //if anywhere outside the modal is clicked, call the close modal function
+        closeModal();
     } if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
-        closeModal(); //if the esc button is clicked, call the close modal function
+        closeModal();
     } else if (event.key == 'Enter') {
-        validateInput(); //if enter button is clicked, call the add task method
+        validateInput();
     }
 }
 
-openModalDiv.addEventListener('click', openModal); //opens the modal when clicked
-closeModalBtn.addEventListener('click', closeModal); //closes the modal when clicked
-addTaskBtn.addEventListener('click', validateInput); //adds the task when clicked
-tasks.addEventListener('click', function(e) {
-    if (e.target.classList.contains('mark-as-complete')) {
-        const itemKey = e.target.parentElement.id;
-        markAsComplete(itemKey);
-    } else if (e.target.classList.contains('delete-task')) {
-        const itemKey = e.target.parentElement.id;
-        deleteTask(itemKey);
-    } else if (e.target.classList.contains('edit-btn')) {
-        const itemKey = e.target.parentElement.id;
-        editTask(itemKey);
-    }
-});
-document.addEventListener('keydown', handleClick);
-window.addEventListener('click', handleClick);
-document.addEventListener('DOMContentLoaded', function() {
+const fetchFromLocalStorage = () => {
     const localStorageData = localStorage.getItem('tasks');
     if (localStorageData) {
         taskLists = JSON.parse(localStorageData);
@@ -147,4 +141,30 @@ document.addEventListener('DOMContentLoaded', function() {
             displayTask(task);
         })
     }
+}
+
+//******************************************************EVENT LISTENERS*******************************************************************
+openModalDiv.addEventListener('click', () => {
+    openModal('add');
 });
+closeModalBtn.addEventListener('click', closeModal);
+addTaskBtn.addEventListener('click', validateInput);
+updateTaskBtn.addEventListener('click', editTask);
+tasks.addEventListener('click', function(e) {
+    const itemKey = e.target.parentElement.id;
+    if (e.target.classList.contains('mark-as-complete')) {
+        markAsComplete(itemKey);
+    } else if (e.target.classList.contains('delete-task')) {
+        deleteTask(itemKey);
+    } else if (e.target.classList.contains('edit-btn')) {
+        const itemIndex = findIndex(itemKey);
+        currentIndex = itemIndex;
+        taskName.value = taskLists[itemIndex].name;
+        openModal('update');
+        openModal();
+        editTask();
+    }
+});
+document.addEventListener('keydown', handleClick);
+window.addEventListener('click', handleClick);
+document.addEventListener('DOMContentLoaded', fetchFromLocalStorage);
