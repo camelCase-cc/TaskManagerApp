@@ -79,7 +79,8 @@ input[type='button'].delete-task {
     font-size: 1.2rem;
 }
 
-input[type='button']#add-task {
+input[type='button']#add-task,
+input[type='button']#update-task {
     width: 100px;
     padding: 10px;
     border: none;
@@ -116,8 +117,9 @@ fieldset {
     margin-bottom: 15px;
 }
 
-label {
-    display: block;
+p {
+    display: flex;
+    word-wrap: break-word;
     font-size: 1rem;
     font-weight: 500;
     margin-bottom: 5px; 
@@ -155,7 +157,7 @@ input[type='text']::placeholder {
 .buttons {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 25px;
 }
 
 .edit-btn {
